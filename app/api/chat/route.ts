@@ -16,8 +16,14 @@ export async function POST(request: Request) {
 
     console.log('Calling Chatbase API...');
     
-    const requestBody = {
-      chatbotId: chatbotId,  // Changed from agentId
+    // Fix: Properly type the request body
+    const requestBody: {
+      chatbotId: string;
+      messages: Array<{ content: string; role: string }>;
+      stream: boolean;
+      conversationId?: string;
+    } = {
+      chatbotId: chatbotId,
       messages: [
         {
           content: message,
@@ -27,7 +33,7 @@ export async function POST(request: Request) {
       stream: false,
     };
 
-    // Only add conversationId if it exists
+    // Add conversationId if it exists
     if (conversationId) {
       requestBody.conversationId = conversationId;
     }
